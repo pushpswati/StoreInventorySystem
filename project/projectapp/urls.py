@@ -6,5 +6,6 @@ url(r'^storeapplogin$',views.StoreLogin.as_view(),name='StoreLogin'),
 url(r'^inventorylist$',views.Inventorylist.as_view(),name='Inventorylist'),
 url(r'^addinventory$',views.AddInventoryRecord.as_view(),name='AddInventoryRecord'),
 url(r'^inventoryapporove$',views.Approve.as_view(),name='Approve'),
+url(r'^userlist$',views.Userlist.as_view(),name='Userlist'),
 ]
 

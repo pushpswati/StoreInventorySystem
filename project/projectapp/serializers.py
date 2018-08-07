@@ -10,4 +10,4 @@ class StoreUserSerializer(serializers.ModelSerializer):
 class InventoryRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model=InventoryRecord
-        fields=('created','product_id','product_name','vender_name','mrp','batch_num','batch_date','quantity','user_id','is_approve')
+        fields=('created','product_id','product_name','user_id','is_approve')

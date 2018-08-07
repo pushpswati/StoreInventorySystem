@@ -1,4 +1,3 @@
-
 from projectapp.models import StoreUser
 from projectapp.models import InventoryRecord
 from projectapp.serializers import InventoryRecordSerializer
@@ -63,28 +62,36 @@ class Inventorylist(APIView):
           serializer = InventoryRecordSerializer(Inventory_obj,many=True)
           return Response(serializer.data, status=status.HTTP_201_CREATED)
            
+class Userlist(APIView):
+      def get(self,request,format=None):
+          print("checkpoint 1")
+          Inventory_obj = StoreUser.objects.all()
+          serializer = StoreUserSerializer(Inventory_obj,many=True)
+          return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+
+
+
 
 class AddInventoryRecord(APIView):
       def post(self,request,format=None):
           product_id = request.data['product_id']
           product_name = request.data['product_name']
-          vender = request.data['vender']
-          mrp = request.data['mrp'] 
-          user_id = request.data['user_id']
-          batch_num = request.data['batch_num']
-          batch_date = request.data['batch_date']
-          quantity = request.data['quantity']
-          is_approve = request.data['is_approve']
+          email = request.data['email']
+
+
+
           
           # select query in orm
-          inventory_obj = Storeuser.objects.get(email=email)
-          
-          user_obj = StudentEnroll.objects.create(product_id=product_id, product_name=product_name, user_id=user_id)
+          user_obj = StoreUser.objects.get(email=email)
+          user_id=user_obj.id
+          inventry_obj = InventoryRecord.objects.create(product_id=product_id, product_name=product_name, user_id=user_id)
           msg_response = "Inventory add Successfully"
 
                  # Custom response dict
           response_dict={"user_id":str(user_id),
-                         "product_id":str(product_id),
+                         "product_id":str(inventry_obj.product_id),
                          "response":msg_response}
 
                  # Final rensponse to send
@@ -94,22 +101,22 @@ class AddInventoryRecord(APIView):
           return Response(RESPONSE, status=status.HTTP_201_CREATED)
 
           
-          msg_response = "This Course id alraeady exceed limit of students, Please select"
-
-             # Final rensponse to send
-          RESPONSE = {"success": True,
-                         "response": msg_response}
-          return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+         
 class Approve(APIView):
       def post(self,request,format=None):
           email = request.data['email']
-          is_manager = request.data['is_manager']
-          inventory_obj = StoreUser.objects.get(email=email)
-          if inventory_obj.is_manager==True: 
-                       in_obj = InventoryRecord.objects.filter(is_approve=False)
-                       print(in_obj)  
-                       serializer = InventoryRecordSerializer(in_obj,many=True)
+
+          user_obj = StoreUser.objects.get(email=email)
+          if user_obj.is_manager==True: 
+                       inies_obj = InventoryRecord.objects.filter(is_approve=False)
+                       print(inies_obj) 
+                       inventry_id_list=[i.id for i in inies_obj] # List of Inventries Ids #using list comprehension
+                       for j in inventry_id_list:
+                           invetry_obj=InventoryRecord.objects.get(id=j)# get particular inventry id obj
+                           invetry_obj.is_approve=True
+                           invetry_obj.save()
+                       print(inventry_id_list)
+                       serializer = InventoryRecordSerializer(inies_obj,many=True)
           return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 

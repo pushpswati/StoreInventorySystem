@@ -14,7 +14,7 @@ class StoreUser(models.Model):
 
 class InventoryRecord(models.Model):
       created = models.DateTimeField(auto_now_add=True)
-      user_id = models.CharField(max_length=100)
+      user_id = models.CharField(max_length=100,blank=True,default='')
       product_id = models.CharField(max_length=100)
       product_name = models.CharField(max_length=100,blank=True,default='')
       vender_name = models.CharField(max_length=100,blank=True,default='')
@@ -27,4 +27,4 @@ class InventoryRecord(models.Model):
 
       class Meta:
           ordering = ('created',)
-
+ 
